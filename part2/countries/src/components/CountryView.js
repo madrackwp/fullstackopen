@@ -3,12 +3,9 @@ import axios from 'axios'
 
 const CountryView = (props) => {
 
-    //apikey = c3414c0950f291789cf0f167bc4d5e4e
-    //set REACT_APP_API_KEY=c3414c0950f291789cf0f167bc4d5e4e && npm start
-    // ($env:REACT_APP_API_KEY='c3414c0950f291789cf0f167bc4d5e4e') -and (npm start)
+    //set REACT_APP_API_KEY={KEY GOES HERE} && npm start
 
-    // const api_key = process.env.REACT_APP_API_KEY
-    const api_key = 'c3414c0950f291789cf0f167bc4d5e4e'
+    const api_key = process.env.REACT_APP_API_KEY
     const country = props.country
     const [ weather, setWeather] = useState({})
     const weatherAPIQuery = `http://api.weatherstack.com/current?access_key=${api_key}&query=${props.country.capital}`
