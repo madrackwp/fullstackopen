@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
-import Filter from './components/Filter'
 import Persons from './components/Persons'
 import PersonsForm from './components/PersonForm'
 import personService from './services/persons'
+import Notification from './components/Notification'
+import Filter from './components/Filter'
 
 const App = () => {
   const [ persons, setPersons ] = useState([]) 
   const [ newName, setNewName ] = useState('')
   const [ newNum, setNewNum ] = useState('')
   const [ filter, setFilter ] = useState('')
-
+  const [ notificationMessage, setNotificationMessage ] = useState('')
+  const [ errorNotification, setErrorNotification ] = useState(false)
 
 
   const hook = () => {
@@ -45,6 +46,19 @@ const App = () => {
               setPersons(persons.map(person => person.id !== id ? person : updatedPerson))
               setNewNum('')
               setNewName('')
+              setNotificationMessage(`${newPerson.name}'s number has been updated`)
+              setTimeout(() => {
+                setNotificationMessage('')
+              },3000)
+            })
+            .catch(error => {
+              setErrorNotification(true)
+              setNotificationMessage(`${newPerson.name}'s details has already been removed`)
+              setTimeout(() => {
+                setNotificationMessage('')
+                setErrorNotification(false)
+              },3000)
+              setPersons(persons.filter(person => person.id !== id))
             })
         }
     } else {
@@ -54,6 +68,13 @@ const App = () => {
           setPersons(persons.concat(newPerson))
           setNewName('')
           setNewNum('')
+          setNotificationMessage(`${newPerson.name} has been added`)
+              setTimeout(() => {
+                setNotificationMessage('')
+              },5000)
+        })
+        .catch(error => {
+          console.log('failed: ',error)
         })
     }    
   }
@@ -90,6 +111,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message = {notificationMessage} error={errorNotification}/>
       <Filter value={filter} handleFilterChange={handleFilterChange}/> 
 
       <h2>add a new</h2>   
