@@ -1,8 +1,18 @@
 const express = require('express')
 const app = express()
+const morgan = require('morgan')
 
 app.use(express.json())
 
+morgan.token('body', (request, response) => {
+  if (request.method === 'POST'){
+    return JSON.stringify(request.body)
+  } else {
+    return ''
+  }
+})
+
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 persons = [
   {
@@ -69,8 +79,8 @@ const generateId = () => {
   return id
 }
 
+
 app.post('/api/persons/', (request, response) => {
-  console.log(request.body)
   const body = request.body
 
   if (!body.name){
@@ -84,8 +94,7 @@ app.post('/api/persons/', (request, response) => {
   }
 
   const dup = persons.filter(person => person.name.toLowerCase() === body.name.toLowerCase())
-
-  if (dup){
+  if (dup.length !== 0){
     return response.status(400).json({
       error: "name must be unique"
     })
@@ -98,9 +107,10 @@ app.post('/api/persons/', (request, response) => {
   }
 
   persons = persons.concat(person)
-
   response.json(person)
 })
+
+
 
 const PORT = 3001
 app.listen(PORT, () => {
