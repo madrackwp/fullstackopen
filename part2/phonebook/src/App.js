@@ -24,7 +24,7 @@ const App = () => {
   const addNewName = (event) => {
     // console.log(persons)
     event.preventDefault()
-    const newPerson = {name: newName, num: newNum}
+    const newPerson = {name: newName, number: newNum}
     // console.log(newPerson)
     let dupChecker = false
     let id = -1
