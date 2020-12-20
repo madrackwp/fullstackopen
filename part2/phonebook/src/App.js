@@ -32,14 +32,16 @@ const App = () => {
     for (i=0; i<persons.length;i++){
         if (persons[i].name === newPerson.name){
             dupChecker = true;
+            console.log("Person already exists in phonebook!")
             id = persons[i].id
         }
     }
 
     
-    if (dupChecker && id >= 0){
+    if (dupChecker){
         // window.alert(`${newName} is already added to phonebook`)
         if (window.confirm(`${newPerson.name} has already been added, replace the old number with a new one?`)){
+          console.log("DUPS")
           personService
             .update(newPerson,id)
             .then(updatedPerson => {
@@ -62,6 +64,7 @@ const App = () => {
             })
         }
     } else {
+      console.log("NOT A DUP")
       personService
         .create(newPerson)
         .then(newPerson => {
