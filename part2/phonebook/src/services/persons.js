@@ -18,7 +18,10 @@ const remove = ( id ) => {
 }
 
 const update = (toUpdate, id ) => {
+    console.log(id)
+    console.log(toUpdate)
     const request = axios.put(`${baseUrl}/${id}`, toUpdate)
+    console.log()
     return request.then(response => response.data)
 }
 

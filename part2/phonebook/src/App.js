@@ -36,15 +36,17 @@ const App = () => {
             id = persons[i].id
         }
     }
+    console.log(dupChecker)
 
     
     if (dupChecker){
         // window.alert(`${newName} is already added to phonebook`)
         if (window.confirm(`${newPerson.name} has already been added, replace the old number with a new one?`)){
-          console.log("DUPS")
+          console.log("DUPS! ID: ",id)
           personService
-            .update(newPerson,id)
+            .update(newPerson, id)
             .then(updatedPerson => {
+              console.log('update success')
               setPersons(persons.map(person => person.id !== id ? person : updatedPerson))
               setNewNum('')
               setNewName('')
@@ -54,6 +56,8 @@ const App = () => {
               },3000)
             })
             .catch(error => {
+              console.log('update failed')
+              console.log(error)
               setErrorNotification(true)
               setNotificationMessage(`${newPerson.name}'s details has already been removed`)
               setTimeout(() => {
@@ -72,12 +76,19 @@ const App = () => {
           setNewName('')
           setNewNum('')
           setNotificationMessage(`${newPerson.name} has been added`)
-              setTimeout(() => {
-                setNotificationMessage('')
-              },5000)
+          setTimeout(() => {setNotificationMessage('')},5000)
         })
         .catch(error => {
-          console.log('failed: ',error)
+          console.log('FAILED!')
+          console.log(error.response)
+          setErrorNotification(true)
+          setNotificationMessage(error.response.data.error)
+          setNewName('')
+          setNewNum('')
+          setTimeout(() => {
+            setNotificationMessage('')
+            setErrorNotification(false)
+          }, 3000)
         })
     }    
   }
